@@ -1,5 +1,8 @@
 # Hand-Cricket
 
+# Deployment 
+handcricketgameai.netlify.app
+
 A stylish and interactive Hand Cricket Game built with HTML, CSS, and JavaScript. Relive your childhood by playing hand cricket against the computer in a dynamic and responsive UI.
 
 🎮 Gameplay Overview
@@ -30,17 +33,10 @@ Two innings: scores are compared, and the higher score wins.
 
 🧼 "New Game" button to restart anytime
 
-📸 Screenshots
-(You can add screenshots here if uploading to GitHub)
-/screenshots/screenshot1.png
-/screenshots/screenshot2.png
-
 🛠️ Tech Stack
 HTML5 – Structure of the game
 
 CSS3 – Styling, gradients, responsive design, and animations
-
-Vanilla JavaScript – Game logic and interactivity
 
 🚀 How to Run Locally
 Clone the repo:
@@ -84,5 +80,5 @@ Multiplayer (2-player local)
 PWA support for offline play
 
 🧑‍💻 Author
-[Your Name] – @yourGitHub
+K.Venkata Sadwik – @yourGitHub
 Feel free to fork and contribute!
