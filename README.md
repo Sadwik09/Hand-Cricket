@@ -1,7 +1,7 @@
 # Hand-Cricket
 
 # Deployment 
-handcricketgameai.netlify.app
+# handcricketgameai.netlify.app
 
 A stylish and interactive Hand Cricket Game built with HTML, CSS, and JavaScript. Relive your childhood by playing hand cricket against the computer in a dynamic and responsive UI.
 
