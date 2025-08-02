@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Cricket Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-status {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scores {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .score-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .score-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .hands-display {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            align-items: center;
+        }
+
+        .hand {
+            font-size: 4rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hand.player {
+            background: rgba(76, 175, 80, 0.3);
+            border-color: #4caf50;
+            color: #4caf50;
+        }
+
+        .hand.computer {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #f44336;
+            color: #f44336;
+        }
+
+        .vs {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .finger-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .finger-btn {
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            border: none;
+            color: white;
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .finger-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #45a049, #4caf50);
+        }
+
+        .finger-btn:active {
+            transform: translateY(0);
+        }
+
+        .game-controls {
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .toss-section {
+            margin-bottom: 20px;
+        }
+
+        .toss-btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #333;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .toss-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .game-over {
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #ffd700;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .winner {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .bounce {
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 20px;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .hand {
+                width: 80px;
+                height: 80px;
+                font-size: 3rem;
+            }
+            
+            .finger-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">Hand Cricket</h1>
+        
+        <div id="toss-section" class="toss-section">
+            <div class="game-status">Choose Heads or Tails for the toss!</div>
+            <button class="toss-btn" onclick="toss('heads')">Heads</button>
+            <button class="toss-btn" onclick="toss('tails')">Tails</button>
+        </div>
+
+        <div id="choice-section" class="toss-section hidden">
+            <div class="game-status" id="toss-result"></div>
+            <button class="toss-btn" onclick="chooseAction('bat')">Bat First</button>
+            <button class="toss-btn" onclick="chooseAction('bowl')">Bowl First</button>
+        </div>
+
+        <div id="game-section" class="hidden">
+            <div class="game-status" id="game-status">Choose your move!</div>
+            
+            <div class="scores">
+                <div class="score-card">
+                    <h3>Your Score</h3>
+                    <div class="score" id="player-score">0</div>
+                </div>
+                <div class="score-card">
+                    <h3>Computer Score</h3>
+                    <div class="score" id="computer-score">0</div>
+                </div>
+            </div>
+
+            <div class="hands-display">
+                <div class="hand player" id="player-hand">?</div>
+                <div class="vs">VS</div>
+                <div class="hand computer" id="computer-hand">?</div>
+            </div>
+
+            <div class="finger-buttons">
+                <button class="finger-btn" onclick="playMove(1)">1</button>
+                <button class="finger-btn" onclick="playMove(2)">2</button>
+                <button class="finger-btn" onclick="playMove(3)">3</button>
+                <button class="finger-btn" onclick="playMove(4)">4</button>
+                <button class="finger-btn" onclick="playMove(5)">5</button>
+                <button class="finger-btn" onclick="playMove(6)">6</button>
+            </div>
+        </div>
+
+        <div id="game-over-section" class="hidden">
+            <div class="game-over">
+                <div class="winner" id="winner-text"></div>
+                <div id="final-scores"></div>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <button class="control-btn" onclick="resetGame()">New Game</button>
+        </div>
+    </div>
+
+    <script>
+        let gameState = {
+            playerScore: 0,
+            computerScore: 0,
+            playerBatting: true,
+            gameOver: false,
+            target: 0,
+            currentInning: 1
+        };
+
+        function toss(choice) {
+            const result = Math.random() < 0.5 ? 'heads' : 'tails';
+            const won = choice === result;
+            
+            document.getElementById('toss-result').textContent = 
+                `Toss result: ${result.toUpperCase()}! You ${won ? 'WON' : 'LOST'} the toss.`;
+            
+            if (won) {
+                document.getElementById('toss-section').classList.add('hidden');
+                document.getElementById('choice-section').classList.remove('hidden');
+            } else {
+                // Computer chooses randomly
+                const computerChoice = Math.random() < 0.5 ? 'bat' : 'bowl';
+                gameState.playerBatting = computerChoice === 'bowl';
+                startGame();
+            }
+        }
+
+        function chooseAction(action) {
+            gameState.playerBatting = action === 'bat';
+            startGame();
+        }
+
+        function startGame() {
+            document.getElementById('toss-section').classList.add('hidden');
+            document.getElementById('choice-section').classList.add('hidden');
+            document.getElementById('game-section').classList.remove('hidden');
+            
+            updateGameStatus();
+        }
+
+        function updateGameStatus() {
+            const status = document.getElementById('game-status');
+            if (gameState.currentInning === 1) {
+                status.textContent = gameState.playerBatting ? 
+                    "You're batting! Choose your score:" : 
+                    "You're bowling! Try to get the computer out:";
+            } else {
+                const target = gameState.target;
+                const needed = target - (gameState.playerBatting ? gameState.playerScore : gameState.computerScore);
+                status.textContent = gameState.playerBatting ? 
+                    `You need ${needed} runs to win!` : 
+                    `Defend ${target} runs! Get the computer out!`;
+            }
+        }
+
+        function playMove(playerMove) {
+            if (gameState.gameOver) return;
+
+            const computerMove = Math.floor(Math.random() * 6) + 1;
+            
+            // Update hand displays with numbers
+            document.getElementById('player-hand').textContent = playerMove;
+            document.getElementById('computer-hand').textContent = computerMove;
+
+            // Add animation
+            document.getElementById('player-hand').classList.add('bounce');
+            document.getElementById('computer-hand').classList.add('bounce');
+            
+            setTimeout(() => {
+                document.getElementById('player-hand').classList.remove('bounce');
+                document.getElementById('computer-hand').classList.remove('bounce');
+            }, 600);
+
+            // Check if out (same number)
+            if (playerMove === computerMove) {
+                handleOut();
+            } else {
+                // Add runs
+                if (gameState.playerBatting) {
+                    gameState.playerScore += playerMove;
+                    document.getElementById('player-score').textContent = gameState.playerScore;
+                } else {
+                    gameState.computerScore += computerMove;
+                    document.getElementById('computer-score').textContent = gameState.computerScore;
+                }
+
+                // Check if target achieved in second inning
+                if (gameState.currentInning === 2) {
+                    const currentScore = gameState.playerBatting ? gameState.playerScore : gameState.computerScore;
+                    if (currentScore > gameState.target) {
+                        endGame();
+                        return;
+                    }
+                }
+            }
+
+            updateGameStatus();
+        }
+
+        function handleOut() {
+            // Add shake animation
+            const battingHand = gameState.playerBatting ? 
+                document.getElementById('player-hand') : 
+                document.getElementById('computer-hand');
+            battingHand.classList.add('shake');
+            
+            setTimeout(() => {
+                battingHand.classList.remove('shake');
+            }, 500);
+
+            if (gameState.currentInning === 1) {
+                // Switch innings
+                gameState.target = gameState.playerBatting ? gameState.playerScore : gameState.computerScore;
+                gameState.playerBatting = !gameState.playerBatting;
+                gameState.currentInning = 2;
+                
+                setTimeout(() => {
+                    alert(`OUT! ${gameState.playerBatting ? 'Computer' : 'You'} scored ${gameState.target} runs. Now ${gameState.playerBatting ? 'you' : 'computer'} need ${gameState.target + 1} runs to win!`);
+                    updateGameStatus();
+                }, 500);
+            } else {
+                // Game over
+                setTimeout(() => {
+                    endGame();
+                }, 500);
+            }
+        }
+
+        function endGame() {
+            gameState.gameOver = true;
+            document.getElementById('game-section').classList.add('hidden');
+            document.getElementById('game-over-section').classList.remove('hidden');
+
+            let winner;
+            if (gameState.currentInning === 1) {
+                winner = "It's a tie!";
+            } else {
+                if (gameState.playerScore > gameState.computerScore) {
+                    winner = "You Win!";
+                } else if (gameState.computerScore > gameState.playerScore) {
+                    winner = "Computer Wins!";
+                } else {
+                    winner = "It's a Tie!";
+                }
+            }
+
+            document.getElementById('winner-text').textContent = winner;
+            document.getElementById('final-scores').innerHTML = 
+                `<p>Final Scores:</p><p>You: ${gameState.playerScore} | Computer: ${gameState.computerScore}</p>`;
+        }
+
+        function resetGame() {
+            gameState = {
+                playerScore: 0,
+                computerScore: 0,
+                playerBatting: true,
+                gameOver: false,
+                target: 0,
+                currentInning: 1
+            };
+
+            document.getElementById('player-score').textContent = '0';
+            document.getElementById('computer-score').textContent = '0';
+            document.getElementById('player-hand').textContent = '?';
+            document.getElementById('computer-hand').textContent = '?';
+
+            document.getElementById('toss-section').classList.remove('hidden');
+            document.getElementById('choice-section').classList.add('hidden');
+            document.getElementById('game-section').classList.add('hidden');
+            document.getElementById('game-over-section').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
